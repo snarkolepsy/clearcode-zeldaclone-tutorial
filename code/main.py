@@ -1,13 +1,12 @@
 import pygame, sys
-from settings import *
+from settings import WIDTH, HEIGHT,FPS, TILESIZE, WORLD_MAP
 
 
 class Game:
     def __init__(self):
-
-        # general setup
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption('Another DM Zelda Clone')
         self.clock = pygame.time.Clock()
 
     def run(self):
@@ -23,5 +22,4 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game()
-    game.run()
+    Game().run()
