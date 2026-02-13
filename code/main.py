@@ -1,5 +1,5 @@
 import pygame, sys
-from settings import WIDTH, HEIGHT,FPS, TILESIZE, WORLD_MAP
+from settings import WIDTH, HEIGHT,FPS, TILE_SIZE, WORLD_MAP
 from level import Level
 
 
@@ -17,7 +17,8 @@ class Game:
         self.level = Level()
 
     def run(self):
-        """Running the core Game object event loop"""
+        """Running the Game object's core event loop"""
+
         while True:
             # Basic event-handling logic
             for event in pygame.event.get():

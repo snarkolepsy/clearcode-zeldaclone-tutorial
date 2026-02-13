@@ -2,7 +2,7 @@
 WIDTH = 1280
 HEIGHT = 720
 FPS = 60
-TILESIZE = 64
+TILE_SIZE = 64
 
 # Temporary layout of our game world
 WORLD_MAP = [
