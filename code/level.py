@@ -13,7 +13,7 @@ class Level:
         self.display_surface = pygame.display.get_surface()
 
         # Define sprite groups
-        self.visible_sprites = pygame.sprite.Group()
+        self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
 
         # Sprite setup
@@ -34,6 +34,27 @@ class Level:
     def run(self):
         """Update and draw the Level"""
 
-        self.visible_sprites.draw(self.display_surface)
+        self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
-        debug(self.player.direction)
+        # debug(self.player.direction)
+
+
+class YSortCameraGroup(pygame.sprite.Group):
+    def __init__(self):
+        """Initialize me daddy"""
+
+        super().__init__()
+        self.display_surface = pygame.display.get_surface()
+        self.offset = pygame.math.Vector2()
+
+    def custom_draw(self, player):
+        """Custom drawing method for objects in view of the camera"""
+
+        # Calculate the offset
+        self.offset.x = player.rect.centerx - self.display_surface.get_size()[0] // 2
+        self.offset.y = player.rect.centery - self.display_surface.get_size()[1] // 2
+
+        # Applying the offset
+        for sprite in sorted(self.sprites(), key = lambda sprite : sprite.rect.centery):
+            offset_position = sprite.rect.topleft - self.offset
+            self.display_surface.blit(sprite.image, offset_position)
