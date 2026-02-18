@@ -22,14 +22,8 @@ class Level:
     def create_map(self):
         """Iterate through the textual representation of the map and create the appropriate sprites"""
 
-        for row_index, row in enumerate(WORLD_MAP):
-            for col_index, column in enumerate(row):
-                x = col_index * TILE_SIZE
-                y = row_index * TILE_SIZE
-                if column == 'x':
-                    Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
-                if column == 'p':
-                    self.player = Player((x, y) , [self.visible_sprites], self.obstacle_sprites)
+        # Placing the player somewhere on the map
+        self.player = Player((2000, 1430), [self.visible_sprites], self.obstacle_sprites)
 
     def run(self):
         """Update and draw the Level"""
@@ -47,6 +41,10 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
         self.offset = pygame.math.Vector2()
 
+        # Creating the floor
+        self.floor_surface = pygame.image.load('../graphics/tilemap/ground.png').convert()
+        self.floor_rect = self.floor_surface.get_rect(topleft = (0,0))
+
     def custom_draw(self, player):
         """Custom drawing method for objects in view of the camera"""
 
@@ -54,7 +52,11 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset.x = player.rect.centerx - self.display_surface.get_size()[0] // 2
         self.offset.y = player.rect.centery - self.display_surface.get_size()[1] // 2
 
-        # Applying the offset
+        # Drawing the floor
+        floor_offset_position = self.floor_rect.topleft - self.offset
+        self.display_surface.blit(self.floor_surface, floor_offset_position)
+
+        # Applying the offset to the sprites
         for sprite in sorted(self.sprites(), key = lambda sprite : sprite.rect.centery):
             offset_position = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_position)
