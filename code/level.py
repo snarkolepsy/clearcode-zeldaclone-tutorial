@@ -3,6 +3,7 @@ from settings import *
 from tile import Tile
 from player import Player
 from debug import debug
+from support import import_csv_layout
 
 
 class Level:
@@ -21,6 +22,23 @@ class Level:
 
     def create_map(self):
         """Iterate through the textual representation of the map and create the appropriate sprites"""
+
+        layouts = {
+            'boundary' : import_csv_layout('../map/map_FloorBlocks.csv')
+        }
+
+        for style, layout in layouts.items():
+            for row_index, row in enumerate(layout):
+                for col_index, column in enumerate(row):
+                    if column  != '-1':
+                        x = col_index * TILE_SIZE
+                        y = row_index * TILE_SIZE
+                        if style == 'boundary':
+                            Tile((x, y), [self.obstacle_sprites], 'invisible')
+        #        if column == 'x':
+        #            Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
+        #        if column == 'p':
+        #            self.player = Player((x, y) , [self.visible_sprites], self.obstacle_sprites)
 
         # Placing the player somewhere on the map
         self.player = Player((2000, 1430), [self.visible_sprites], self.obstacle_sprites)
