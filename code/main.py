@@ -1,5 +1,5 @@
 import pygame, sys
-from settings import WIDTH, HEIGHT,FPS, TILE_SIZE, WORLD_MAP
+from settings import *
 from level import Level
 
 

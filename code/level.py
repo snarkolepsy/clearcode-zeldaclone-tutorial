@@ -3,7 +3,8 @@ from settings import *
 from tile import Tile
 from player import Player
 from debug import debug
-from support import import_csv_layout
+from support import *
+from random import choice
 
 
 class Level:
@@ -21,10 +22,17 @@ class Level:
         self.create_map()
 
     def create_map(self):
-        """Iterate through the textual representation of the map and create the appropriate sprites"""
+        """Iterate through the textual representation of the map and place the appropriate tiles"""
 
         layouts = {
-            'boundary' : import_csv_layout('../map/map_FloorBlocks.csv')
+            'boundary' : import_csv_layout('../map/map_FloorBlocks.csv'),
+            'grass' : import_csv_layout('../map/map_Grass.csv'),
+            'object' : import_csv_layout('../map/map_Objects.csv'),
+        }
+
+        graphics = {
+            'grass' : import_folder('../graphics/grass'),
+            'objects' : import_folder('../graphics/objects')
         }
 
         for style, layout in layouts.items():
@@ -35,10 +43,12 @@ class Level:
                         y = row_index * TILE_SIZE
                         if style == 'boundary':
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
-        #        if column == 'x':
-        #            Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
-        #        if column == 'p':
-        #            self.player = Player((x, y) , [self.visible_sprites], self.obstacle_sprites)
+                        if style == 'grass':
+                            random_grass_image = choice(graphics['grass'])
+                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'grass', random_grass_image)
+                        if style == 'object':
+                            surf = graphics['objects'][int(column)]
+                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'object', surf)
 
         # Placing the player somewhere on the map
         self.player = Player((2000, 1430), [self.visible_sprites], self.obstacle_sprites)
